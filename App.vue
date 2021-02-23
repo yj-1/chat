@@ -1,17 +1,5 @@
-<template>
-	<view class="h100 column">
-		<view class="grow">
-			<router-view></router-view>
-		</view>
-		<Tabbar></Tabbar>
-	</view>
-</template>
 <script>
-	import Tabbar from 'components/tabbar.vue'
 	export default {
-		components: {
-			Tabbar
-		},
 		onLaunch: function() {
 			console.log('App Launch')
 		},
@@ -31,6 +19,10 @@
 		margin: 0;
 		padding: 0;
 		box-sizing: border-box;
+	}
+	uni-page-body, .wh {
+		width: 100%;
+		height: 100%;
 	}
 	.h100 {
 		height: 100%;

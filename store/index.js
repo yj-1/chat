@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 Vue.use(Vuex)
-console.log(Vuex)
+
 const store = new Vuex.Store({
 	state: {
 		index: 0
