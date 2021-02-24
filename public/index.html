@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script crossorigin="anonymous" integrity="sha512-tXH7Av8en7+/hg0XwBppaCDPmpJhUXbZ+j7lNC4y+ZQpmCZQcgQN6RjkM7Irj1MUW7bZengfuTOqR4RzCC4bnA==" src="https://lib.baomitu.com/socket.io/3.1.1/socket.io.min.js"></script>
+  <title>测试</title>
+</head>
+<body>
+  <input type="text"> <button type="button" id="send">发送</button>
+  <script>
+    console.log(io)
+    const socket = io('http://localhost:3000')
+    socket.on('connect', () => {
+      console.log(socket.connected)
+      socket.emit('sendMessage', navigator.userAgent)
+    })
+    .on('f', (data) => {
+      console.log(data)
+    })
+    var sender = () => {
+      console.log('234')
+      if(!socket.connected) {
+        return false
+      }
+      const str = document.querySelector('input').value
+      console.log(str)
+      socket.emit('say', str)
+    }
+    console.log(sender)
+    document.querySelector('#send').addEventListener('click', () => {
+      sender()
+    })
+    
+  </script>
+</body>
+</html>
