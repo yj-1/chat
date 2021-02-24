@@ -1,1 +1,0 @@
-<view class="wh"><skeleton vue-id="e8b1ac40-1" bind:__l="__l" vue-slots="{{['default','top']}}"><view slot="top"><view class="header-top"><view></view><view class="pos-center">联系人</view></view></view><contact vue-id="{{('e8b1ac40-2')+','+('e8b1ac40-1')}}" bind:__l="__l"></contact></skeleton></view>
