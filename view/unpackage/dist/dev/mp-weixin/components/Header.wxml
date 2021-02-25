@@ -1,1 +1,0 @@
-<view class="{{['data-v-1a9bb128','header_bar',cls&&cls]}}"><view class="status data-v-1a9bb128" style="{{'--top:'+(top)+';'}}"></view><slot></slot></view>

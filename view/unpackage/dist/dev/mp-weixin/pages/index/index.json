@@ -1,7 +1,0 @@
-{
-  "navigationBarTitleText": "首页",
-  "usingComponents": {
-    "item": "/pages/index/components/newList",
-    "skeleton": "/components/pageSkeleton"
-  }
-}
