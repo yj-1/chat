@@ -3,10 +3,15 @@ import * as express from 'express'
 import { createServer } from 'http'
 import { Server } from 'socket.io'
 import { urlencoded, json } from 'body-parser'
+// import mogno from './mongo/index'
+import mongo from './mongo/index'
 
+import User from './router/user'
 // 定义变量
 const app = express()
 const server = createServer(app)
+const { log } = console
+let db = undefined
 // 导包 结束
 
 app.all('*', (req, res, next) => {
@@ -19,7 +24,10 @@ app.all('*', (req, res, next) => {
   next()
 })
 
-
+// mongo.getMongo()
+mongo().then(data=> {
+  db = data
+})
 
 // 使用中间件 开始
 app.use(urlencoded({extended: false}))
@@ -36,25 +44,40 @@ const io = new Server(server,{
 
 io.on('connection', (socket) => {
   console.log('有用户连接')
-  socket.on('sendMessage', (data) => {
-    console.log(234,data)
+  socket.on('r_message', (data) => { // 用户连接
+    log(234,data)
     // data.id = socket.immediate
-    io.emit('receiveMessage', data)
+    io.emit('s_join', data)
   })
-  .on('say', (data) => {
-    console.log(data)
-    io.emit('f', data)
+  .on('r_join', (data) => { // 加入聊天
+    log(data)
+    io.emit('s_person', data)
+  })
+  .on('r_say', (data:{name: string, msg: string}) => { // 发送消息
+    log(data)
+    io.emit('s_say', data)
   })
 })
+.on('r_createGroup', (data) => {
+  console.log(data)
+})
+.on('r_joinGroup', (data) => {
 
-app.get('/getUser', (req, res) => {
-  // res.send('234')
-  res.sendFile('./public/index.html')
 })
 
+const room = [{
+  id: '唯一ID',
+  name: '测试群',
+  groupLeader: '', // 群主
+  member: [
+    {id: '234'}
+  ] // 成员
+}]
+
+app.use('/getUser', User)
 
 
 // 监听服务
 server.listen(3000, () => {
-  console.log('服务器已经启动了')
+  console.log('服务器已经启动了\n http://localhost:3000')
 })
