@@ -1,0 +1,1 @@
+<view class="content wh"><skeleton vue-id="8dd740cc-1" bind:__l="__l" vue-slots="{{['default','top']}}"><view slot="top"><view class="header-top"><view></view><view class="pos-center">首页</view><view class="header-right"><view class="mr-20">搜索</view><text>添加</text></view></view></view><item vue-id="{{('8dd740cc-2')+','+('8dd740cc-1')}}" bind:__l="__l"></item></skeleton></view>
