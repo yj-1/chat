@@ -1,1 +1,3 @@
 node_modules
+db.ts
+email/config.ts
