@@ -1,14 +1,36 @@
 import { Schema, model } from 'mongoose'
-
+const _validate = (validator:Function, message='缺少参数{NAME}',isAsync=true) => {
+  return {
+    isAsync,
+    validator,
+    message
+  }
+}
 export const User = model('User', new Schema({
   name: {
     type: String,
-    required: true
-  },
-  pwd: {
+    message: '缺少name！',
+    validate: _validate(async function (val, cb) {
+      console.log(this.message, '名字', cb)
+      return User.findOne({ name: val }, 'name')
+        .then(data => {
+          if (!data) {
+            return cb(false, '缺少参数name！')
+          }
+          console.log(this)
+          return cb(false, '缺少参数name！')
+          // return Promise.reject('错误')
+        })
+        .catch(err => {
+          return false
+        })
+    },)
+    // required: [ true, '缺少name参数！' ]
+  }, // 用户名
+  password: {
     type: String,
     required: true
-  },
+  }, // 密码
   sex: { // 性别
     type: Number,
     default: 2
@@ -16,7 +38,7 @@ export const User = model('User', new Schema({
   avatar: {
     type: String,
     default: 'user.png'
-  },
+  }, // 头像
   date: {
     type: Date,
     default: Date.now()

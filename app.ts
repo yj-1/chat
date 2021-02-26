@@ -5,7 +5,7 @@ import { Server } from 'socket.io'
 import { urlencoded, json } from 'body-parser'
 // import mogno from './mongo/index'
 import mongo from './mongo/index'
-
+import Register from './router/register'
 import User from './router/user'
 // 定义变量
 const app = express()
@@ -17,9 +17,10 @@ let db = undefined
 app.all('*', (req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*') // 允许访问的地址
   res.header('Access-Control-Allow-Headers','X-Requested-with')
-  res.header('Access-Control-Allow-Headers', 'Content-Type')
+  // res.header('Access-Control-Allow-Headers', 'Content-Type')
+  res.header('Content-Type', "application/json;charset=utf-8")
   res.header('Access-Control-Allow-Methods', 'GET,POST,UPDATE,DELETE') // 允许请求类型
-  res.header('Access-Control-Allow-Credentials', 'true')
+  // res.header('Access-Control-Allow-Credentials', 'true')
   res.header('X-Powered-By', '3.2.1')
   next()
 })
@@ -45,7 +46,7 @@ const io = new Server(server,{
 io.on('connection', (socket) => {
   console.log('有用户连接')
   socket.on('r_message', (data) => { // 用户连接
-    log(234,data)
+    log(data)
     // data.id = socket.immediate
     io.emit('s_join', data)
   })
@@ -73,7 +74,8 @@ const room = [{
     {id: '234'}
   ] // 成员
 }]
-
+// 路由
+app.use('/register', Register)
 app.use('/getUser', User)
 
 
