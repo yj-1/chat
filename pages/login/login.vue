@@ -39,6 +39,17 @@
 		methods: {
 			onSubmit() {
 				console.log(234)
+				uni.request({
+					url: '/api/login',
+					data: {
+						username: this.username,
+						password: this.password
+					},
+					method: 'POST',
+					success(data) {
+						console.log(data)
+					}
+				})
 			}
 		}
 	}

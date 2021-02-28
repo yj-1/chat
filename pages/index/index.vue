@@ -50,23 +50,10 @@
 			}
 		},
 		onLoad() {
-			console.log(234)
-			// const socket = uni.connectSocket({
-			// 		url: 'wss://localhost:3000',
-			// 		success() {
-			// 			console.log('连接成功!')
-			// 		}
-			// 	})
-			// socket.on('connect', (data) => {
-				
-			// })
-			uni.request({
-				url: 'http://localhost:3000',
-				method: 'GET'
-			})
+
 		},
 		methods: {
-				
+
 		}
 	}
 </script>
@@ -91,7 +78,7 @@
 	}
 	.wh {
 		width: 100%;
-		heihgt: 100%;
+		height: 100%;
 	}
 
 .header-top {

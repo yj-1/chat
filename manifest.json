@@ -79,7 +79,7 @@
 			"devServer": {
 				"proxy": {
 					"^/api": {
-						"target": "http://192.168.0.100:3000",
+						"target": "http://192.168.31.157:3000",
 						"chageOrigin": true,
 						"ws": true,
 						"pathRewrite": {

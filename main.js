@@ -5,7 +5,7 @@ import store from 'store/index.js'
 import vant from 'vant'
 import { connect, io } from 'socket.io-client'
 
-const socket = io('http://192.168.0.100:3000',{
+const socket = io('http://192.168.31.157:3000',{
   transports: ['websocket']
 })
 socket.on('connect', () => {
