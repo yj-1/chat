@@ -47,6 +47,21 @@
 					},
 					method: 'POST',
 					success(data) {
+						uni.navigateTo({
+							url: '/pages/index/index',
+							success:(data) => {
+								if(data.status === '200' && data.result) {
+									const { username, sex, avatar, token } = data.result
+									
+									uni.setStorage({
+										key: 'token',
+										data: token,
+									})
+									
+									this.$store.commit('setUser', { username, sex, avatar })
+								}
+							}
+						})
 						console.log(data)
 					}
 				})

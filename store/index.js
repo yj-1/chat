@@ -7,11 +7,20 @@ const store = new Vuex.Store({
 		index: 0,
 		chat: {
 			name: '测试'
+		},
+		user: {
+			username: ''
 		}
 	},
 	mutations: {
-		setState(state, repold) {
-			state[repold.key] = repold.value
+		setState(state, payload) {
+			state[payload.key] = payload.value
+		},
+		setUser(state, user) {
+			state.user = user
+		},
+		setUserKey(state, payload) {
+			state.user[payload.key] = payload.value
 		},
 		chat(state, val) {
 			

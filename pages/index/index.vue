@@ -6,29 +6,13 @@
 					<view></view>
 					<view class="pos-center">首页</view>
 					<view class="header-right">
-						<view class="mr-20">搜索</view>
+						<view class="mr-20" @click="goSearch">搜索</view>
 						<text>添加</text>
 					</view>
 				</view>
 			</template>
 			<Item></Item>
 		</Skeleton>
-<!-- 		<Header>
-			<view class="header-top">
-				<view></view>
-				<view class="pos-center">首页</view>
-				<view class="header-right">
-					<view class="mr-20">搜索</view>
-					<text>添加</text>
-				</view>
-			</view>
-		</Header>
-		<view class="wh column">
-				<view class="grow overflow">
-					<Item></Item>
-				</view>
-				<Tabbar></Tabbar>
-		</view> -->
 	</view>
 </template>
 
@@ -53,7 +37,11 @@
 
 		},
 		methods: {
-
+			goSearch() {
+				uni.navigateTo({
+					url: '/pages/search/search'
+				})
+			}
 		}
 	}
 </script>

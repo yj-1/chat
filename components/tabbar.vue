@@ -1,6 +1,6 @@
 <template>
 	<view class="tabbars">
-		<view v-for="(val, i) in list" :key="i" :class="['tabbar ',$store.state.index === i?'selected':'']" @click="go(i, val.path)">
+		<view v-for="(val, i) in list" :key="i" :class="['tabbar ',$store.state.index == i?'selected':'']" @click="go(i, val.path)">
 			<van-icon :name="val.icon" />
 			<text>{{val.text}}</text>
 		</view>
@@ -32,6 +32,16 @@
 						path: '/pages/personal/personal'
 					}
 				]
+			}
+		},
+		mounted() {
+			let  route = getCurrentPages()
+			const path = route[route.length - 1].route
+			for(let i in this.list) {
+				if(this.list[i].path === '/'+path) {
+					this.$store.commit({ type: 'setState', key: 'index', value: i })
+					return false
+				}
 			}
 		},
 		methods: {

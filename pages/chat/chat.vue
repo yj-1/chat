@@ -54,7 +54,9 @@
 		},
 		methods: {
 			onClickLeft() {
-				uni.navigateBack()
+				uni.navigateTo({
+					url: '/pages/index/index'
+				})
 			}
 		},
 	}

@@ -68,6 +68,9 @@
 					method: 'POST',
 					data: this.form,
 					success(data) {
+						uni.navigateTo({
+							url: '/pages/login/login'
+						})
 						console.log(data)
 					}
 				})
