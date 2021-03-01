@@ -35,6 +35,13 @@ export const User = model('User', new Schema({
     type: String,
     default: 'user.jpg'
   }, // 头像
+  online: { // 是否在线
+    type: Number,
+    default: 2, // 0代表在线
+  },
+  socketId: { // socketId
+    type: String,
+  },
   date: {
     type: Date,
     default: Date.now()
@@ -84,6 +91,7 @@ export const GroupMsg = model('GroupMsg', new Schema({
   types: { String }, // 消息类型
   date: { type: Date, default: Date.now() }
 })) // 群消息
+
 
 export default {
   User,

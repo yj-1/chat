@@ -1,5 +1,7 @@
 import { Router } from 'express'
-import { _200, _400, _500 } from '../modal/send'
+import { verifyToken } from '../config/token'
+import { _200, _400, _404, _500 } from '../modal/send'
+import auth from '../module/auth'
 import { Friend, User } from '../mongo/user'
 const route = Router()
 
@@ -38,5 +40,17 @@ route.post('/friends', async (req, res) => {
 
 
 }) // 搜索好友
+
+route.get('/', auth, function(req:any, res) {
+  console.log(req.user)
+  const { id } = req.user
+  User.updateOne({_id:id}, {online: 0})
+  .then(data => {
+    console.log(data)
+  })
+  .catch(err => {
+    console.log(err)
+  })
+})
 
 export default route

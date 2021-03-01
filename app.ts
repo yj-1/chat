@@ -6,6 +6,7 @@ import { urlencoded, json } from 'body-parser'
 // import mogno from './mongo/index'
 import mongo from './mongo/index'
 import getRoutes from './module/setRoute'
+import { updateLanguageServiceSourceFile } from 'typescript'
 // import Register from './router/register'
 // import User from './router/user'
 // import Login from './router/login'
@@ -44,22 +45,26 @@ const io = new Server(server,{
   pingInterval: 10000,
   pingTimeout: 5000
 }) // 启动socket.io 模块
-
+const task = []
 io.on('connection', (socket) => {
-  console.log('有用户连接')
-  socket.on('r_message', (data) => { // 用户连接
+  console.log('有用户连接',socket.id)
+  if(task.length) {
+    task.forEach((ele, i) => {
+      if(i < task.length) {
+        clearTimeout(ele)
+        task.shift()
+      }
+    })
+  }
+
+  socket.on('r_message', (data: any) => { // 用户连接
     log(data)
-    // data.id = socket.immediate
     io.emit('s_join', data)
   })
-  .on('r_join', (data) => { // 加入聊天
-    log(data)
-    io.emit('s_person', data)
-  })
-  .on('r_say', (data:{name: string, msg: string}) => { // 发送消息
-    log(data)
-    io.emit('s_say', data)
-  })
+})
+.on('r_sendMsg', data => {
+  console.log(data)
+  io.emit('s_sendMsg', data)
 })
 .on('r_createGroup', (data) => {
   console.log(data)
@@ -88,9 +93,6 @@ getRoutes()
 .catch(err => {
   console.log(err)
 })
-// app.use('/register', Register)
-// app.use('/getUser', User)
-// app.use('/login', Login)
 
 
 // 监听服务
