@@ -5,8 +5,10 @@ import { Server } from 'socket.io'
 import { urlencoded, json } from 'body-parser'
 // import mogno from './mongo/index'
 import mongo from './mongo/index'
-import Register from './router/register'
-import User from './router/user'
+import getRoutes from './module/setRoute'
+// import Register from './router/register'
+// import User from './router/user'
+// import Login from './router/login'
 // 定义变量
 const app = express()
 const server = createServer(app)
@@ -75,8 +77,20 @@ const room = [{
   ] // 成员
 }]
 // 路由
-app.use('/register', Register)
-app.use('/getUser', User)
+getRoutes()
+.then((data:any) => {
+  if(data?.length) {
+    for(const r of data) {
+      app.use(r.path, r.fn)
+    }
+  }
+})
+.catch(err => {
+  console.log(err)
+})
+// app.use('/register', Register)
+// app.use('/getUser', User)
+// app.use('/login', Login)
 
 
 // 监听服务

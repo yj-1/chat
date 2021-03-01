@@ -10,6 +10,10 @@ export const _500 = function(msg = '服务器错误！', text='error') {
   return {status: '500', text, msg}
 } // 服务器出错
 
+export const _400 = function (msg:string, text = 'error') {
+  return { status: '400', text, msg:`${msg}错误！` }
+} // 服务器出错
+
 export const _404 = function(msg = '该数据不存在！',text = 'not found') {
   return {status: '404', text, msg}
 } // 未找到

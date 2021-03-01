@@ -1,34 +1,30 @@
 import { Schema, model } from 'mongoose'
-const _validate = (validator:Function, message='缺少参数{NAME}',isAsync=true) => {
-  return {
-    isAsync,
-    validator,
-    message
-  }
+type ts_validate = (val: boolean, str?:string) => boolean
+// const _validate = (validator: (val:string, cb:ts_validate) => Promise<boolean>, message='缺少参数',isAsync=true) => {
+//   return {
+//     isAsync,
+//     validator,
+//     message
+//   }
+// }
+export type ts_user = {
+  _id: Schema.Types.ObjectId,
+  username: string,
+  password: string,
+  sex?: number,
+  avatar: string,
+  date: Date,
+  [key:string]: any
 }
 export const User = model('User', new Schema({
-  name: {
+  username: {
     type: String,
-    message: '缺少name！',
-    validate: _validate(async function (val, cb) {
-      console.log(this.message, '名字', cb)
-      return User.findOne({ name: val }, 'name')
-        .then(data => {
-          if (!data) {
-            return cb(false, '缺少参数name！')
-          }
-          console.log(this)
-          return cb(false, '缺少参数name！')
-          // return Promise.reject('错误')
-        })
-        .catch(err => {
-          return false
-        })
-    },)
-    // required: [ true, '缺少name参数！' ]
+    message: '缺少userusername！',
+    required: true
   }, // 用户名
   password: {
     type: String,
+    message: '缺少password',
     required: true
   }, // 密码
   sex: { // 性别
@@ -37,16 +33,22 @@ export const User = model('User', new Schema({
   },
   avatar: {
     type: String,
-    default: 'user.png'
+    default: 'user.jpg'
   }, // 头像
   date: {
     type: Date,
     default: Date.now()
   }
-})) // 用户表
+}), 'user') // 用户表
 
+export type ts_friend = {
+  userId: Schema.Types.ObjectId,
+  friendId: Schema.Types.ObjectId,
+  status?: number,
+  date?: Date
+}
 export const Friend = model('Friend', new Schema({
-  userId: { type: Schema.Types.ObjectId, ref: 'User' }, // 用户id
+  userId: { type: Schema.Types.ObjectId, ref: 'User', required: true }, // 用户id
   friendId: { type: Schema.Types.ObjectId, ref: 'User' }, // 好友id
   status: { type: Number, default: 2 }, // 好友状态
   date: { type: Date, default: Date.now() }
