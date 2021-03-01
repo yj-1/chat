@@ -23,7 +23,7 @@
 		  </div>
 		</van-form>
 		<view class="go-reg">
-			<text>去注册</text>
+			<text @click="goReg">去注册</text>
 		</view>
 	</view>
 </template>
@@ -46,24 +46,44 @@
 						password: this.password
 					},
 					method: 'POST',
-					success(data) {
-						uni.navigateTo({
-							url: '/pages/index/index',
-							success:(data) => {
-								if(data.status === '200' && data.result) {
-									const { username, sex, avatar, token } = data.result
-									
-									uni.setStorage({
-										key: 'token',
-										data: token,
-									})
-									
-									this.$store.commit('setUser', { username, sex, avatar })
+					success: (data) => {
+						if(data.data.status === '200' && data.data.result) {
+							const { username, sex, avatar, token } = data.data.result
+							
+							uni.setStorage({
+								key: 'token',
+								data: token,
+							})
+							
+							this.$store.commit('setUser', { username, sex, avatar })
+							console.log(this.$store.state)
+							this.$toast.success('登陆成功！')
+							uni.request({
+								url:'/api/user/',
+								header: {
+									authorization: token
+								},
+								method:'GET',
+								success(data) {
+									console.log('234',data)
 								}
-							}
-						})
-						console.log(data)
+							})
+							uni.navigateTo({
+								url: '/pages/index/index',
+							})
+						} else {
+							this.$toast.error(data.data.msg)
+						}
+						console.log(data, 234)
+					},
+					fail: () => {
+						this.$toast.error('登陆失败！')
 					}
+				})
+			},
+			goReg() {
+				uni.navigateTo({
+					url: '/pages/register/register'
 				})
 			}
 		}

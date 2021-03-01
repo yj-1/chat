@@ -17,6 +17,7 @@ const store = new Vuex.Store({
 			state[payload.key] = payload.value
 		},
 		setUser(state, user) {
+			console.log(23423)
 			state.user = user
 		},
 		setUserKey(state, payload) {

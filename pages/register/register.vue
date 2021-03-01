@@ -67,11 +67,20 @@
 					url: '/api/register',
 					method: 'POST',
 					data: this.form,
-					success(data) {
+					success: (data) => {
+						if(data.data.status === '200') {
+							this.$toast.success('注册成功！')
 						uni.navigateTo({
 							url: '/pages/login/login'
 						})
+						} else {
+							this.$toast.error(data.data.msg)
+						}
+						
 						console.log(data)
+					},
+					fail:() => {
+						this.$toast.error('注册失败！')
 					}
 				})
 			}
