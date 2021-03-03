@@ -2,7 +2,7 @@
 	<view class="wh">
 		<van-search v-model="value" placeholder="请输入搜索关键词" show-action @search="onSearch" @cancel="onCancel" @input="getUser" />
 		<view class="user-list">
-			<view>
+			<view v-if="list.length">
 				<view class="pd10">
 					<text>用户：</text>
 				</view>
@@ -16,8 +16,8 @@
 							</view>
 						</view>
 					</template>
-					<van-button v-if="ele.status == 0" type="primary" size="small" disabled round>{{'发送消息'}}</van-button>
-					<van-button v-else-if="ele.status == 2" type="primary" size="small" disabled round>{{'加好友'}}</van-button>
+					<van-button v-if="ele.status == 0" type="primary" size="small" round>{{'发送消息'}}</van-button>
+					<van-button v-else-if="ele.status == 2" type="primary" size="small" round @click="add(ele._id)">{{'加好友'}}</van-button>
 				</van-cell>
 			</view>
 			
@@ -35,8 +35,8 @@
 							</view>
 						</view>
 					</template>
-					<van-button v-if="ele.status == 0" type="primary" size="small" disabled round>{{'发送消息'}}</van-button>
-					<van-button v-else-if="ele.status == 1" type="primary" size="small" disabled round>{{'加好友'}}</van-button>
+					<van-button v-if="ele.status == 0" type="primary" size="small" round>{{'发送消息'}}</van-button>
+					<van-button v-else-if="ele.status == 1" type="primary" size="small" round>{{'加好友'}}</van-button>
 				</van-cell>
 			</view>
 		</view>
@@ -49,16 +49,16 @@
 			return {
 				value: '',
 				list:[
-					{
-						username: '用户1',
-						avatar: '',
-						status: '0'
-					},
-					{
-						username: '用户1',
-						avatar: '',
-						status: '1'
-					}
+					// {
+					// 	username: '用户1',
+					// 	avatar: '',
+					// 	status: '0'
+					// },
+					// {
+					// 	username: '用户1',
+					// 	avatar: '',
+					// 	status: '1'
+					// }
 				],
 				group: [
 					
@@ -75,10 +75,26 @@
 				})
 				console.log('取消了')
 			},
+			add(id) {
+				console.log(id,234)
+				uni.request({
+					url: '/api/user/addFriend',
+					method: 'POST',
+					header: {
+						authorization: uni.getStorageSync('token')
+					},
+					data: { friendId: id },
+					success: (data) => {
+						console.log(data)
+					},
+					fail: (err) => {
+						console.log(err)
+					}
+				})
+			},
 			getUser: (function() {
 				let time = []
 				return function(val) {
-					console.log(this)
 					if(time.length) {
 						time = time.filter((ele, i) => {
 							if(i < time.length) {
@@ -91,16 +107,29 @@
 						// clearTimeout(time)
 					}
 					 time.push(setTimeout(() => {
+						 if(!this.value) {
+							 return false
+						 }
+						// this.$toast.loading({
+						// 	duration:0,
+						// 	message: '加载中...',
+						// })
 						uni.request({
 							url: '/api/search/friends',
 							method: "POST",
-							data: { username: this.value,id: '603b832a82c37523b8a2c059' },
+							data: { username: this.value, id: '603b832a82c37523b8a2c059' },
 							success:(data) => {
+								this.$toast.clear()
+								if(!data?.data?.result) {
+									return false
+								}
 								time = []
-								console.log(this)
 								this.$set(this, 'list', data.data.result?.list)
 								console.log(data.result)
-								console.log(data)
+							},
+							fail: (err) => {
+								// this.$toast.clear()
+								this.$toast.error('获取失败！')
 							}
 						})
 					},1000))

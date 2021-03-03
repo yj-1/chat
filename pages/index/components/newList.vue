@@ -4,7 +4,7 @@
 			<view class="item" @click="go">
 				<view class="between">
 					<view class="userImg">
-						<image :src="data.url"></image>
+						<image v-if="data.url" :src="'http://localhost:3000'+data.url"></image>
 					</view>
 					<view class="align-center">
 						<text class="title">{{data.name}}</text>
@@ -12,7 +12,7 @@
 					</view>
 				</view>
 				<view class="align-center">
-					<text>{{data.time}}</text>
+					<text>{{data.time | time}}</text>
 				</view>
 			</view>
 			<template #right>
@@ -27,20 +27,19 @@
 		props: {
 			list: {
 				type: Array,
-				default: () => ([
-					{
-						url: require('../../../static/logo.png'),
-						name: '系统消息',
-						message: '测试信息',
-						time: '08:00'
-					},
-					{
-						url: require('../../../static/logo.png'),
-						name: '系统消息1',
-						message: '测试信息测试信息测试信息测试信息测试信息测试信息测试信息测试信息测试信息测试信息测试信息测试信息测试信息测试信息',
-						time: '08:10'
-					}
-				])
+				default: () => ([])
+			}
+		},
+		filters: {
+			time(val) {
+				
+				if(val) {
+					const date = new Date(val)
+					const s = date.getHours()
+					const m = date.getMinutes()
+					return (s+'').padStart(2,0)+':'+(m+'').padStart(2,0)
+				}
+				return '234'
 			}
 		},
 		methods: {
@@ -48,6 +47,12 @@
 				uni.navigateTo({
 					url: '/pages/chat/chat'
 				})
+			}
+		},
+		watch: {
+			'$store.state.list': {
+				handler() {},
+				deep: true,
 			}
 		}
 	}

@@ -11,7 +11,7 @@
 					</view>
 				</view>
 			</template>
-			<Item></Item>
+			<Item :list="list"></Item>
 		</Skeleton>
 	</view>
 </template>
@@ -30,11 +30,18 @@
 		},
 		data() {
 			return {
-				title: 'Hello'
+				title: 'Hello',
+				list: []
 			}
 		},
-		onLoad() {
-
+		onShow() {
+			if(this.$store.state?.list?.length) {
+				this.list = this.$store.state.list
+				console.log(this.list)
+			}
+		},
+		mounted() {
+			console.log('测试')
 		},
 		methods: {
 			goSearch() {
