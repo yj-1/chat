@@ -6,8 +6,7 @@ import { urlencoded, json } from 'body-parser'
 // import mogno from './mongo/index'
 import mongo from './mongo/index'
 import getRoutes from './module/setRoute'
-import { updateLanguageServiceSourceFile } from 'typescript'
-import { verifyToken } from './config/token'
+import socket from './module/socket'
 // import Register from './router/register'
 // import User from './router/user'
 // import Login from './router/login'
@@ -39,86 +38,11 @@ app.use(urlencoded({extended: false}))
 app.use(json())
 
 app.use(express.static('./public'))
+app.use(socket(server))
 // 使用中间件 结束
 
 // 初始化
-const io = new Server(server,{
-  pingInterval: 10000,
-  pingTimeout: 5000,
-  cors: {
-    methods: ['GET', 'POST'],
-    origin: 'http://localhost:3000'
-  }
-}) // 启动socket.io 模块
-const task = []
-interface TS_Err extends Error {
-  data?: {
-    content?: string,
-    [key: string]: any
-  }
-}
-interface TS_socket extends Socket {
-  user?: object | boolean
-}
-const noAuth = (socket: TS_socket, next: Function) => {
-  const err: TS_Err = new Error('缺少token，未经授权！')
-      err.data = { content: '请稍后重试！' }
-      next(err)
-      socket.disconnect(true)
-} // 鉴权方法
-const isAuth = (socket: TS_socket, next: Function) => {
-  const { token } = socket.handshake.auth
-  console.log(token)
-  if(!token||token.length < 30) {
-    console.log(token,234)
-    noAuth(socket, next)
-  } else {
-    const isAuth = verifyToken(token)
-    if(isAuth) {
-      console.log(234)
-      socket.user = isAuth
-      next()
-    } else {
-      noAuth(socket, next)
-    }
-  }
-} // 鉴权中间件
-io.use(isAuth)
-io.on('connection', (socket) => {
-  console.log('有用户连接',socket.id)
-  if(task.length) {
-    task.forEach((ele, i) => {
-      if(i < task.length) {
-        clearTimeout(ele)
-        task.shift()
-      }
-    })
-  }
 
-  socket.on('r_message', (data: any) => { // 用户连接
-    log(data)
-    io.emit('s_join', data)
-  })
-})
-.on('r_sendMsg', data => {
-  console.log(data)
-  io.emit('s_sendMsg', data)
-})
-.on('r_createGroup', (data) => {
-  console.log(data)
-})
-.on('r_joinGroup', (data) => {
-
-})
-
-const room = [{
-  id: '唯一ID',
-  name: '测试群',
-  groupLeader: '', // 群主
-  member: [
-    {id: '234'}
-  ] // 成员
-}]
 // 路由
 getRoutes()
 .then((data:any) => {

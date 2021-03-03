@@ -1,3 +1,4 @@
+import { Schema, SchemaTypeOptions } from 'mongoose'
 import { _200, _500 } from '../../modal/send'
 import { User } from './index'
 
@@ -18,3 +19,9 @@ export const findUser = async (username, res) => {
     })
 }
 
+export const isOnLine = async (id: Schema.Types.ObjectId) => {
+  console.log(id,234)
+ const _id = await User.findOne({_id:id}, '')
+ console.log(_id)
+ return _id
+}

@@ -12,7 +12,7 @@ route.post('/', (req, res) => {
   User.findOne({username}, 'password username sex avatar')
     .then((data:any) => {
 
-      if(!data) { return res.json(_404('用户')) }
+      if(!data) { return res.json(_404('该用户不存在！')) }
       compare(password, data.password, (err, bool) => {
         if(err) { return res.json(_500('程序出错！')) }
         else if(bool) {
